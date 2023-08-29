@@ -1,0 +1,227 @@
+Screen:
+    MDBoxLayout:
+        id: toolbar
+        orientation: 'horizontal'
+        size_hint: (1,.1)
+        pos_hint: {"top": 1}
+        canvas.before:
+            Color:
+                rgba: 0.827, 0.757, 0.824, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint: (.3,1)
+            padding: 10
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint: (.3,1)
+            MDLabel:
+                text:'Stock Market'
+                halign: "center"
+                pos_hint: {"center_x":.5}
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint: (.3,1)
+
+
+    MDNavigationLayout:
+        x: toolbar.height
+        size_hint_y: 1.0 - toolbar.height/root.height
+        ScreenManager:
+            id: screen_manager
+            Screen:
+                name: "main_screen_activity"
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    MDBoxLayout:#mdboxlayout left
+                        size_hint: (.5,1)
+                        orientation: "vertical"
+                        canvas.before:
+                            Color:
+                                rgba: 1,0,1,0 # pink
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                        MDBoxLayout: # up
+                            orientation: "vertical"
+                            size_hint: (1,.1)
+                            MDTextField:
+                                text: "Pesquisar"
+                                size_hint_x: .4
+                                multiline: False
+                                halign: "center"
+                                pos_hint: {"center_x": .5}
+                                on_text_validate: app.search_stocks(self.text)
+                        MDBoxLayout: # bottom
+                            orientation: "vertical"
+                            size_hint: (1,.9)
+                            #ScrollView: #old version
+                                #id: scroll_view
+                                #do_scroll_x: False
+                            AnchorLayout:
+                                id: scroll_layout
+                                #orientation:'vertical'
+                                size_hint: (1,1)
+                                #spacing: '30'
+                                #size_hint_y: None
+                                #height: self.minimum_height
+                    MDBoxLayout: #mdboxlayout right
+                        orientation:'vertical'
+                        size_hint: (.5,1)
+                        padding: 4
+                        canvas.before:
+                            Color:
+                                rgba: 1,1,0,0 # yellow
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                        MDBoxLayout:
+                            orientation: "horizontal"
+                            size_hint_x: 1
+                            size_hint_y: None
+                            height: self.minimum_height
+                            canvas.before:
+                                Color:
+                                    rgba: 1,0,0,0 # red
+                                Rectangle:
+                                    pos: self.pos
+                                    size: self.size
+                            MDFlatButton:
+                                text: "Principal"
+                                size_hint_x: .25
+                                on_release:
+                                    root.ids.box_layout_principal.opacity = 1
+                                    root.ids.box_layout_regression.opacity = 0
+                                    root.ids.box_layout_garch.opacity = 0
+                                    root.ids.box_layout_arima.opacity = 0
+                            MDFlatButton:
+                                text: "Linear Regression"
+                                size_hint_x: .25
+                                on_release:
+                                    root.ids.box_layout_principal.opacity = 0
+                                    root.ids.box_layout_regression.opacity = 1
+                                    root.ids.box_layout_garch.opacity = 0
+                                    root.ids.box_layout_arima.opacity = 0
+                            MDFlatButton:
+                                text: "GARCH"
+                                size_hint_x: .25
+                                on_release:
+                                    root.ids.box_layout_principal.opacity = 0
+                                    root.ids.box_layout_regression.opacity = 0
+                                    root.ids.box_layout_garch.opacity = 1
+                                    root.ids.box_layout_arima.opacity = 0
+                            MDFlatButton:
+                                text: "ARIMA"
+                                size_hint_x: .25
+                                on_release:
+                                    root.ids.box_layout_principal.opacity = 0
+                                    root.ids.box_layout_regression.opacity = 0
+                                    root.ids.box_layout_garch.opacity = 0
+                                    root.ids.box_layout_arima.opacity = 1
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            size_hint: (1,.9)
+                            canvas.before:
+                                Color:
+                                    rgba: 0,0,1,0 # blue
+                                Rectangle:
+                                    pos: self.pos
+                                    size: self.size
+                            FloatLayout:
+                                MDBoxLayout:#principal info about stock area
+                                    id: box_layout_principal
+                                    orientation: "vertical"
+                                    size_hint: (1,1)
+                                    pos_hint: {"right": 1, "bottom": 1}
+                                    MDBoxLayout:
+                                        orientation: "vertical"
+                                        size_hint: (1,.1)
+                                        MDLabel:
+                                            text: "Principal Chart"
+                                            halign: "center"
+                                            pos_hint: {"center_x": .5}
+                                    AnchorLayout:
+                                        size_hint: (1,.9)
+                                        MDCard:
+                                            id: chart_card
+                                            size_hint: (.9,.7)
+                                            padding: 4
+
+                                MDBoxLayout:#linear regression area
+                                    id: box_layout_regression
+                                    orientation: "vertical"
+                                    size_hint: (1,1)
+                                    opacity: 0
+                                    pos_hint: {"right": 1, "bottom": 1}
+                                    MDBoxLayout:
+                                        orientation: "vertical"
+                                        size_hint: (1,.1)
+                                        MDLabel:#title
+                                            text: "Linear Regression"
+                                            halign: "center"
+                                            pos_hint: {"center_x": .5}
+                                    AnchorLayout:#put the chart mdcard
+                                        orientation: "horizontal"
+                                        size_hint: (1,.9)
+                                        MDCard:
+                                            id: boxRegression_chart
+                                            size_hint: (.9,.7)
+                                            padding: 4
+                                            #elevation: 3
+
+                                MDBoxLayout:#garch analysis area
+                                    id: box_layout_garch
+                                    orientation: "vertical"
+                                    size_hint: (1,1)
+                                    opacity: 0
+                                    pos_hint: {"right": 1, "bottom": 1}
+                                    MDBoxLayout:
+                                        orientation: "vertical"
+                                        size_hint: (1,.1)
+                                        MDLabel:
+                                            text: "Garch Analysis"
+                                            halign: "center"
+                                            pos_hint: {"center_x": .5}
+                                    #MDBoxLayout:
+                                        #id: garch_summary
+                                        #orientation: "vertical"
+                                        #size_hint: (1,.9)
+                                    AnchorLayout:#put the garch mdcard
+                                        orientation: "horizontal"
+                                        size_hint: (1,.9)
+                                        MDBoxLayout:
+                                            id: garch_summary
+                                            size_hint_x: 1
+                                            size_hint_y: None
+                                            padding: 4
+                                            canvas.before:
+                                                Color:
+                                                    rgba: 1,0,0,0 #red
+                                                Rectangle:
+                                                    pos: self.pos
+                                                    size: self.size
+
+
+                                MDBoxLayout: #arima analysis area
+                                    id: box_layout_arima
+                                    orientation: "vertical"
+                                    size_hint: (1,1)
+                                    opacity: 0
+                                    pos_hint: {"right": 1, "bottom": 1}
+                                    MDBoxLayout:
+                                        orientation: "vertical"
+                                        size_hint: (1,.1)
+                                        MDLabel:
+                                            text: "Arima Analysis"
+                                            halign: "center"
+                                            pos_hint: {"center_x": .5}
+                                    AnchorLayout:#put the chart mdcard
+                                        orientation: "horizontal"
+                                        size_hint: (1,.9)
+                                        MDCard:
+                                            id: arima_summary
+                                            size_hint: (.9,.7)
+                                            padding: 4
